@@ -5,10 +5,25 @@
     body {
       width: 300px;
       padding: 10px;
+      font-family: Arial, sans-serif;
     }
     input {
       width: 100%;
       margin-bottom: 10px;
+    }
+    .nav-links {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #ccc;
+    }
+    .nav-links a {
+      display: block;
+      color: #4CAF50;
+      text-decoration: none;
+      padding: 5px 0;
+    }
+    .nav-links a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -17,6 +32,9 @@
   <label for="targetUrl">Target URL (e.g., "example.com"):</label>
   <input type="text" id="targetUrl">
   <button id="save">Save</button>
+  <div class="nav-links">
+    <a href="focus.html" target="_blank">Focus Mode Settings</a>
+  </div>
   <script src="popup.js"></script>
 </body>
 </html> 
