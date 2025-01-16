@@ -43,7 +43,7 @@ function addHoverListeners(element) {
 function processElements(rootElement) {
     if (window.location.href.includes(targetUrl)) {
         // Process regular elements
-        rootElement.querySelectorAll("a, button").forEach(element => {
+        rootElement.querySelectorAll("a, button, div.switch, input, label, iframe").forEach(element => {
             addHoverListeners(element);
         });
 
