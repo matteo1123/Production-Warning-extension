@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Production Warning",
+  "version": "1.0",
+  "description": "Shows a red box when hovering over links on specified websites",
+  "permissions": ["storage"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_end",
+      "css": ["styles.css"]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
