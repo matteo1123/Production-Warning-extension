@@ -26,7 +26,7 @@
     "default_popup": "popup.html"
   },
   "web_accessible_resources": [{
-    "resources": ["focus.html", "icons/icon32.png"],
+    "resources": ["focus.html", "icons/icon32.png", "icons/icon48.png"],
     "matches": ["<all_urls>"]
   }]
 }

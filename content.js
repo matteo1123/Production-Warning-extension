@@ -1,14 +1,3 @@
-// Listen for messages from the extension
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.action === "getSelectedText") {
-        const selectedText = window.getSelection().toString();
-        sendResponse({ text: selectedText });
-    }
-});
-
-// Log to verify the content script is loaded
-console.log('Production Warning script loaded successful');
-
 // Create hover box element
 const hoverBox = document.createElement('div');
 hoverBox.style.cssText = `
@@ -34,7 +23,7 @@ focusBar.style.cssText = `
     width: 100%;
     background-color: #1a1a1a;
     color: #ffd700;
-    padding: 10px 0;
+    padding: 5px 0;
     z-index: 10001;
     display: none;
     text-align: center;
@@ -45,15 +34,15 @@ focusBar.style.cssText = `
 const logoContainer = document.createElement('div');
 logoContainer.style.cssText = `
     position: absolute;
-    left: 10px;
+    left: 15px;
     top: 50%;
     transform: translateY(-50%);
 `;
 
 const logo = document.createElement('img');
-logo.src = chrome.runtime.getURL('icons/icon32.png');
-logo.style.width = '32px';
-logo.style.height = '32px';
+logo.src = chrome.runtime.getURL('icons/icon48.png');
+logo.style.width = '48px';
+logo.style.height = '48px';
 logoContainer.appendChild(logo);
 focusBar.appendChild(logoContainer);
 
@@ -64,7 +53,8 @@ focusLabel.style.cssText = `
     color: #cc0000;
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
+    line-height: 1;
 `;
 focusLabel.textContent = "Current Focus";
 focusBar.appendChild(focusLabel);
@@ -79,6 +69,7 @@ mainFocus.style.cssText = `
     align-items: center;
     justify-content: center;
     gap: 10px;
+    line-height: 1.2;
 `;
 
 // Add emphasis arrows
@@ -104,7 +95,8 @@ linksContainer.style.cssText = `
     display: flex;
     justify-content: space-around;
     font-size: 14px;
-    padding: 0 20px;
+    padding: 2px 20px 0;
+    line-height: 1;
 `;
 focusBar.appendChild(linksContainer);
 
@@ -140,63 +132,37 @@ function processElements(rootElement) {
             addHoverListeners(element);
         });
 
-        // Process iframes
+        // Process iframes - simplified version
         rootElement.querySelectorAll("iframe").forEach(iframe => {
             try {
-                // Only process same-origin iframes
                 if (iframe.contentDocument) {
                     processElements(iframe.contentDocument);
-                    
-                    // Observe iframe content for changes
                     observer.observe(iframe.contentDocument.body, {
                         childList: true,
                         subtree: true
                     });
                 }
-            } catch (e) {
-                // Skip cross-origin iframes
-                console.log("Cannot access iframe due to same-origin policy");
-            }
+            } catch {} // No need to log cross-origin errors
         });
     }
 }
 
-// Set up the mutation observer
+// Simplify the mutation observer code
 const observer = new MutationObserver((mutations) => {
     mutations.forEach(mutation => {
-        if (mutation.addedNodes.length) {
-            mutation.addedNodes.forEach(node => {
-                if (node.nodeType === Node.ELEMENT_NODE) {
-                    processElements(node);
-                    
-                    // If the new node is an iframe, process it
-                    if (node.tagName === 'IFRAME') {
-                        try {
-                            node.addEventListener('load', () => {
-                                if (node.contentDocument) {
-                                    processElements(node.contentDocument);
-                                }
-                            });
-                        } catch (e) {
-                            console.log("Cannot access iframe due to same-origin policy");
-                        }
-                    }
-                }
-            });
-        }
+        mutation.addedNodes.forEach(node => {
+            if (node.nodeType === Node.ELEMENT_NODE) {
+                processElements(node);
+            }
+        });
     });
 });
 
-// Initialize when the target URLs are retrieved
+// Remove verbose logging here
 chrome.storage.sync.get(['targetUrl1', 'targetUrl2'], function(result) {
     targetUrl1 = result.targetUrl1 || "";
     targetUrl2 = result.targetUrl2 || "";
-    console.log("Production warning extension: target urls configured as", targetUrl1, targetUrl2);
-    
-    // Process existing elements
     processElements(document);
-    
-    // Start observing the document for changes
     observer.observe(document.body, {
         childList: true,
         subtree: true
