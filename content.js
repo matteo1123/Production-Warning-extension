@@ -23,7 +23,7 @@ focusBar.style.cssText = `
     width: 100%;
     background-color: #1a1a1a;
     color: #ffd700;
-    padding: 5px 0;
+    padding: 2px 0;
     z-index: 10001;
     display: none;
     text-align: center;
@@ -38,6 +38,8 @@ logoContainer.style.cssText = `
     left: 15px;
     top: 50%;
     transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 `;
 
 const logo = document.createElement('img');
@@ -65,14 +67,15 @@ focusBar.appendChild(focusLabel);
 // Update main focus styling
 const mainFocus = document.createElement('div');
 mainFocus.style.cssText = `
-    font-size: 24px;
+    font-size: 18px;
     color: #ffd700;
     font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    line-height: 1.2;
+    line-height: 1;
+    padding: 2px 0;
 `;
 
 // Add emphasis arrows
@@ -240,7 +243,8 @@ focusBar.addEventListener('mouseenter', function() {
     linksContainer.style.opacity = '1';
     linksContainer.style.height = 'auto';
     linksContainer.style.marginTop = '8px';
-    // Update padding to prevent content jump
+    logoContainer.style.opacity = '1';
+    focusBar.style.padding = '5px 0';
     document.body.style.paddingTop = focusBar.offsetHeight + 'px';
 });
 
@@ -249,7 +253,8 @@ focusBar.addEventListener('mouseleave', function() {
     linksContainer.style.opacity = '0';
     linksContainer.style.height = '0';
     linksContainer.style.marginTop = '0';
-    // Update padding after transition
+    logoContainer.style.opacity = '0';
+    focusBar.style.padding = '2px 0';
     setTimeout(() => {
         document.body.style.paddingTop = focusBar.offsetHeight + 'px';
     }, 300);
