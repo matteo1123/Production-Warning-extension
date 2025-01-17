@@ -9,7 +9,7 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "permissions": ["storage"],
+  "permissions": ["storage", "contextMenus"],
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
@@ -19,7 +19,14 @@
       "all_frames": true
     }
   ],
+  "background": {
+    "service_worker": "background.js"
+  },
   "action": {
     "default_popup": "popup.html"
-  }
+  },
+  "web_accessible_resources": [{
+    "resources": ["focus.html", "icons/icon32.png", "icons/icon48.png"],
+    "matches": ["<all_urls>"]
+  }]
 }
