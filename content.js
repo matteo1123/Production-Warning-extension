@@ -41,14 +41,61 @@ focusBar.style.cssText = `
     border-bottom: 2px solid #ffd700;
 `;
 
-// Create main focus text
+// Add logo container
+const logoContainer = document.createElement('div');
+logoContainer.style.cssText = `
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+`;
+
+const logo = document.createElement('img');
+logo.src = chrome.runtime.getURL('icons/icon32.png');
+logo.style.width = '32px';
+logo.style.height = '32px';
+logoContainer.appendChild(logo);
+focusBar.appendChild(logoContainer);
+
+// Add focus label
+const focusLabel = document.createElement('div');
+focusLabel.style.cssText = `
+    font-size: 12px;
+    color: #cc0000;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+`;
+focusLabel.textContent = "Current Focus";
+focusBar.appendChild(focusLabel);
+
+// Update main focus styling
 const mainFocus = document.createElement('div');
 mainFocus.style.cssText = `
     font-size: 24px;
-    margin-bottom: 8px;
     color: #ffd700;
     font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 `;
+
+// Add emphasis arrows
+const leftArrow = document.createElement('span');
+leftArrow.textContent = '>';
+leftArrow.style.color = '#cc0000';
+leftArrow.style.fontWeight = 'bold';
+
+const rightArrow = document.createElement('span');
+rightArrow.textContent = '<';
+rightArrow.style.color = '#cc0000';
+rightArrow.style.fontWeight = 'bold';
+
+const focusText = document.createElement('span');
+mainFocus.appendChild(leftArrow);
+mainFocus.appendChild(focusText);
+mainFocus.appendChild(rightArrow);
 focusBar.appendChild(mainFocus);
 
 // Create links container
@@ -63,7 +110,13 @@ focusBar.appendChild(linksContainer);
 
 document.body.appendChild(focusBar);
 
-let targetUrl = "";
+let targetUrl1 = "";
+let targetUrl2 = "";
+
+// Function to check if URL matches either target
+function isTargetUrl(url) {
+    return url.includes(targetUrl1) || url.includes(targetUrl2);
+}
 
 // Function to add hover listeners to an element
 function addHoverListeners(element) {
@@ -81,7 +134,7 @@ function addHoverListeners(element) {
 
 // Function to process elements
 function processElements(rootElement) {
-    if (window.location.href.includes(targetUrl)) {
+    if (isTargetUrl(window.location.href)) {
         // Process regular elements
         rootElement.querySelectorAll("a, button, div.switch, input, label, iframe").forEach(element => {
             addHoverListeners(element);
@@ -134,10 +187,11 @@ const observer = new MutationObserver((mutations) => {
     });
 });
 
-// Initialize when the target URL is retrieved
-chrome.storage.sync.get(['targetUrl'], function(result) {
-    targetUrl = result.targetUrl;
-    console.log("Production warning extension: target url configured as", targetUrl);
+// Initialize when the target URLs are retrieved
+chrome.storage.sync.get(['targetUrl1', 'targetUrl2'], function(result) {
+    targetUrl1 = result.targetUrl1 || "";
+    targetUrl2 = result.targetUrl2 || "";
+    console.log("Production warning extension: target urls configured as", targetUrl1, targetUrl2);
     
     // Process existing elements
     processElements(document);
@@ -156,7 +210,7 @@ function updateFocusBar(focusData) {
         return;
     }
 
-    mainFocus.textContent = focusData.mainFocus;
+    focusText.textContent = focusData.mainFocus;
     linksContainer.innerHTML = '';
     
     if (focusData.links) {

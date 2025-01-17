@@ -70,6 +70,9 @@
     .nav-links a:hover {
       color: #cc0000;
     }
+    .url-input {
+      margin-bottom: 15px;
+    }
   </style>
 </head>
 <body>
@@ -77,8 +80,14 @@
     <img src="icons/icon32.png" alt="Logo">
     <h3>Link Hover Indicator Settings</h3>
   </div>
-  <label for="targetUrl">Target URL (e.g., "example.com"):</label>
-  <input type="text" id="targetUrl">
+  <div class="url-input">
+    <label for="targetUrl1">Target URL 1 (e.g., "example.com"):</label>
+    <input type="text" id="targetUrl1">
+  </div>
+  <div class="url-input">
+    <label for="targetUrl2">Target URL 2 (e.g., "example.com"):</label>
+    <input type="text" id="targetUrl2">
+  </div>
   <button id="save">Save</button>
   <div class="nav-links">
     <a href="focus.html" target="_blank">Focus Mode Settings</a>
