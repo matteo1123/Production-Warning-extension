@@ -114,7 +114,7 @@ let targetUrl2 = "";
 
 // Function to check if URL matches either target
 function isTargetUrl(url) {
-    return url.includes(targetUrl1) || url.includes(targetUrl2);
+    return (targetUrl1 && url.includes(targetUrl1)) || (targetUrl2 && url.includes(targetUrl2));
 }
 
 // Function to add hover listeners to an element
