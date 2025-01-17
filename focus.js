@@ -17,6 +17,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function addLinkPair(existing = { key: '', value: '' }) {
+        // Don't add if we've reached the limit
+        if (linkPairs.children.length >= 8) {
+            return;
+        }
+
         const pair = document.createElement('div');
         pair.className = 'link-pair';
         
@@ -32,12 +37,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const removeBtn = document.createElement('button');
         removeBtn.textContent = 'X';
-        removeBtn.onclick = () => pair.remove();
+        removeBtn.onclick = () => {
+            pair.remove();
+            // Re-enable add button if we're below limit
+            if (linkPairs.children.length < 8) {
+                addLinkBtn.disabled = false;
+            }
+        };
 
         pair.appendChild(keyInput);
         pair.appendChild(valueInput);
         pair.appendChild(removeBtn);
         linkPairs.appendChild(pair);
+
+        // Disable add button if we've reached the limit
+        if (linkPairs.children.length >= 8) {
+            addLinkBtn.disabled = true;
+        }
     }
 
     addLinkBtn.addEventListener('click', () => {
@@ -69,5 +85,18 @@ document.addEventListener('DOMContentLoaded', function() {
         chrome.storage.sync.set({ focusMode }, function() {
             alert('Focus mode settings saved!');
         });
+    });
+
+    // Listen for storage changes to update UI when links are added via context menu
+    chrome.storage.onChanged.addListener((changes, namespace) => {
+        if (namespace === 'sync' && changes.focusMode) {
+            const newFocusMode = changes.focusMode.newValue;
+            if (newFocusMode && newFocusMode.links) {
+                // Clear existing links
+                linkPairs.innerHTML = '';
+                // Add all links
+                newFocusMode.links.forEach(addLinkPair);
+            }
+        }
     });
 }); 

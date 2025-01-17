@@ -58,9 +58,28 @@
         input[type="checkbox"] {
             accent-color: #cc0000;
         }
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .header img {
+            width: 32px;
+            height: 32px;
+            margin-right: 10px;
+        }
+        h2 {
+            color: #ffd700;
+            margin: 0;
+        }
     </style>
 </head>
 <body>
+    <div class="header">
+        <img src="icons/icon32.png" alt="Logo">
+        <h2>Focus Mode Settings</h2>
+    </div>
+    
     <div class="toggle">
         <label>
             <input type="checkbox" id="enableFocus"> Enable Focus Mode
