@@ -21,13 +21,12 @@ focusBar.style.cssText = `
     top: 0;
     left: 0;
     width: 100%;
-    background-color: #1a1a1a;
-    color: #ffd700;
-    padding: 2px 0;
+    background-color: transparent;
+    height: 2px;
+    border-bottom: 2px solid #ffd700;
     z-index: 10001;
     display: none;
     text-align: center;
-    border-bottom: 2px solid #ffd700;
     transition: all 0.3s ease;
 `;
 
@@ -40,6 +39,8 @@ logoContainer.style.cssText = `
     transform: translateY(-50%);
     opacity: 0;
     transition: opacity 0.3s ease;
+    height: 0;
+    overflow: hidden;
 `;
 
 const logo = document.createElement('img');
@@ -59,12 +60,14 @@ focusLabel.style.cssText = `
     margin-bottom: 2px;
     line-height: 1;
     opacity: 0;
+    height: 0;
+    overflow: hidden;
     transition: opacity 0.3s ease;
 `;
 focusLabel.textContent = "Current Focus";
 focusBar.appendChild(focusLabel);
 
-// Update main focus styling
+// Create main focus container
 const mainFocus = document.createElement('div');
 mainFocus.style.cssText = `
     font-size: 18px;
@@ -75,7 +78,11 @@ mainFocus.style.cssText = `
     justify-content: center;
     gap: 10px;
     line-height: 1;
-    padding: 2px 0;
+    padding: 0;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
 `;
 
 // Add emphasis arrows
@@ -101,7 +108,7 @@ linksContainer.style.cssText = `
     display: flex;
     justify-content: space-around;
     font-size: 14px;
-    padding: 2px 20px 0;
+    padding: 0;
     line-height: 1;
     opacity: 0;
     height: 0;
@@ -220,8 +227,7 @@ function updateFocusBar(focusData) {
     }
     
     focusBar.style.display = 'block';
-    // Set initial padding
-    document.body.style.paddingTop = focusBar.offsetHeight + 'px';
+    document.body.style.paddingTop = '2px';
 }
 
 // Listen for focus mode updates
@@ -239,25 +245,37 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
 
 // Add hover behavior to focus bar
 focusBar.addEventListener('mouseenter', function() {
+    focusBar.style.backgroundColor = '#1a1a1a';
+    focusBar.style.height = 'auto';
+    focusBar.style.padding = '5px 0';
     focusLabel.style.opacity = '1';
+    focusLabel.style.height = 'auto';
+    mainFocus.style.opacity = '1';
+    mainFocus.style.height = 'auto';
+    mainFocus.style.padding = '2px 0';
     linksContainer.style.opacity = '1';
     linksContainer.style.height = 'auto';
     linksContainer.style.marginTop = '8px';
     logoContainer.style.opacity = '1';
-    focusBar.style.padding = '5px 0';
+    logoContainer.style.height = 'auto';
     document.body.style.paddingTop = focusBar.offsetHeight + 'px';
 });
 
 focusBar.addEventListener('mouseleave', function() {
+    focusBar.style.backgroundColor = 'transparent';
+    focusBar.style.height = '2px';
+    focusBar.style.padding = '0';
     focusLabel.style.opacity = '0';
+    focusLabel.style.height = '0';
+    mainFocus.style.opacity = '0';
+    mainFocus.style.height = '0';
+    mainFocus.style.padding = '0';
     linksContainer.style.opacity = '0';
     linksContainer.style.height = '0';
     linksContainer.style.marginTop = '0';
     logoContainer.style.opacity = '0';
-    focusBar.style.padding = '2px 0';
-    setTimeout(() => {
-        document.body.style.paddingTop = focusBar.offsetHeight + 'px';
-    }, 300);
+    logoContainer.style.height = '0';
+    document.body.style.paddingTop = '2px';
 });
 
 
