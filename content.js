@@ -28,6 +28,7 @@ focusBar.style.cssText = `
     display: none;
     text-align: center;
     border-bottom: 2px solid #ffd700;
+    transition: all 0.3s ease;
 `;
 
 // Add logo container
@@ -55,6 +56,8 @@ focusLabel.style.cssText = `
     letter-spacing: 1px;
     margin-bottom: 2px;
     line-height: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 `;
 focusLabel.textContent = "Current Focus";
 focusBar.appendChild(focusLabel);
@@ -97,6 +100,10 @@ linksContainer.style.cssText = `
     font-size: 14px;
     padding: 2px 20px 0;
     line-height: 1;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
 `;
 focusBar.appendChild(linksContainer);
 
@@ -173,6 +180,7 @@ chrome.storage.sync.get(['targetUrl1', 'targetUrl2'], function(result) {
 function updateFocusBar(focusData) {
     if (!focusData || !focusData.enabled) {
         focusBar.style.display = 'none';
+        document.body.style.paddingTop = '0';
         return;
     }
 
@@ -209,7 +217,7 @@ function updateFocusBar(focusData) {
     }
     
     focusBar.style.display = 'block';
-    // Adjust body padding to prevent content from going under the focus bar
+    // Set initial padding
     document.body.style.paddingTop = focusBar.offsetHeight + 'px';
 }
 
@@ -224,6 +232,27 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
     if (namespace === 'sync' && changes.focusMode) {
         updateFocusBar(changes.focusMode.newValue);
     }
+});
+
+// Add hover behavior to focus bar
+focusBar.addEventListener('mouseenter', function() {
+    focusLabel.style.opacity = '1';
+    linksContainer.style.opacity = '1';
+    linksContainer.style.height = 'auto';
+    linksContainer.style.marginTop = '8px';
+    // Update padding to prevent content jump
+    document.body.style.paddingTop = focusBar.offsetHeight + 'px';
+});
+
+focusBar.addEventListener('mouseleave', function() {
+    focusLabel.style.opacity = '0';
+    linksContainer.style.opacity = '0';
+    linksContainer.style.height = '0';
+    linksContainer.style.marginTop = '0';
+    // Update padding after transition
+    setTimeout(() => {
+        document.body.style.paddingTop = focusBar.offsetHeight + 'px';
+    }, 300);
 });
 
 
