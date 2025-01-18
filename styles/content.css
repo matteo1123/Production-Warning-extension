@@ -1,0 +1,184 @@
+/* Focus Bar */
+.focus-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #1a1a1a;
+    height: auto;
+    padding: 4px 0;
+    border-bottom: 2px solid #ffd700;
+    z-index: 10001;
+    display: none;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+/* Logo Container */
+.logo-container {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    height: 0;
+    overflow: hidden;
+}
+
+.logo-container img {
+    width: 48px;
+    height: 48px;
+}
+
+/* Focus Label */
+.focus-label {
+    font-size: 12px;
+    color: #cc0000;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    line-height: 1;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    transition: opacity 0.3s ease;
+}
+
+/* Main Focus */
+.main-focus {
+    font-size: 14px;
+    color: #ffd700;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    line-height: 1;
+    padding: 0;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.main-focus .arrow {
+    color: #cc0000;
+    font-weight: bold;
+}
+
+/* Links Container */
+.links-container {
+    display: flex;
+    justify-content: space-around;
+    font-size: 14px;
+    padding: 0;
+    line-height: 1;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+/* Context Notes */
+.context-notes-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    background-color: #2a2a2a;
+    border: 2px solid #ffd700;
+    border-radius: 50%;
+    color: #ffd700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    line-height: 1;
+    padding-bottom: 1px;
+}
+
+.notification-dot {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 8px;
+    height: 8px;
+    background-color: #cc0000;
+    border-radius: 50%;
+    display: none;
+}
+
+/* Notes Popup */
+.notes-popup {
+    position: fixed;
+    top: 40px;
+    right: 10px;
+    width: 400px;
+    background-color: #1a1a1a;
+    border: 2px solid #ffd700;
+    border-radius: 4px;
+    padding: 15px;
+    z-index: 10002;
+    display: none;
+    color: #ffd700;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.notes-input {
+    width: 100%;
+    height: 120px;
+    margin-bottom: 15px;
+    background-color: #2a2a2a;
+    border: 1px solid #ffd700;
+    color: #ffd700;
+    padding: 12px;
+    resize: vertical;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.notes-list {
+    max-height: 300px;
+    overflow-y: auto;
+    position: relative;
+}
+
+.note-item {
+    padding: 12px;
+    margin: 8px 0;
+    background-color: #2a2a2a;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-size: 14px;
+    line-height: 1.4;
+    cursor: move;
+    user-select: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+}
+
+/* Production Warning */
+.hover-box {
+    position: fixed;
+    background-color: #cc0000;
+    color: #ffffff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    z-index: 10000;
+    display: none;
+    border: 1px solid #ffd700;
+    font-weight: bold;
+}
+
+/* Animations */
+@keyframes pulse {
+    0% { transform: translateY(-50%) scale(1); }
+    50% { transform: translateY(-50%) scale(1.1); }
+    100% { transform: translateY(-50%) scale(1); }
+} 
