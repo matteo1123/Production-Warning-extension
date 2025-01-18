@@ -1,21 +1,21 @@
 // Only inject the focus bar if we're in the main window, not an iframe
 if (window === window.top) {
-    // Create hover box element
-    const hoverBox = document.createElement('div');
-    hoverBox.style.cssText = `
-        position: fixed;
+// Create hover box element
+const hoverBox = document.createElement('div');
+hoverBox.style.cssText = `
+    position: fixed;
         background-color: #cc0000;
         color: #ffffff;
         padding: 8px 12px;
-        border-radius: 4px;
-        font-size: 12px;
-        z-index: 10000;
-        display: none;
+    border-radius: 4px;
+    font-size: 12px;
+    z-index: 10000;
+    display: none;
         border: 1px solid #ffd700;
         font-weight: bold;
         pointer-events: none;
-    `;
-    document.body.appendChild(hoverBox);
+`;
+document.body.appendChild(hoverBox);
 
     // Create focus bar
     const focusBar = document.createElement('div');
@@ -274,10 +274,10 @@ if (window === window.top) {
     // Function to add hover listeners to an element
     function addHoverListeners(element) {
         element.addEventListener('mouseover', function(e) {
-            hoverBox.textContent = "Production!";
-            hoverBox.style.display = 'block';
-            hoverBox.style.left = e.pageX + 10 + 'px';
-            hoverBox.style.top = e.pageY + 10 + 'px';
+                hoverBox.textContent = "Production!";
+                hoverBox.style.display = 'block';
+                hoverBox.style.left = e.pageX + 10 + 'px';
+                hoverBox.style.top = e.pageY + 10 + 'px';
         });
 
         element.addEventListener('mouseout', function() {
@@ -532,11 +532,11 @@ if (window === window.top) {
                     const midpoint = rect.top + rect.height / 2;
                     if (e.clientY < midpoint) {
                         noteDiv.style.transform = 'translateY(10px)';
-                    } else {
+} else {
                         noteDiv.style.transform = 'translateY(-10px)';
-                    }
-                }
-            });
+}
+}
+});
 
             noteDiv.addEventListener('dragleave', () => {
                 noteDiv.style.transform = 'none';

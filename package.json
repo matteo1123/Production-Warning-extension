@@ -1,0 +1,31 @@
+{
+  "name": "production-warning-extension",
+  "version": "1.0.0",
+  "description": "Chrome extension for production warnings and focus management",
+  "main": "background.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "echo \"No build step configured\"",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/production-warning.git"
+  },
+  "keywords": [
+    "chrome-extension",
+    "production",
+    "warning",
+    "focus",
+    "productivity"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yourusername/production-warning/issues"
+  },
+  "homepage": "https://github.com/yourusername/production-warning#readme",
+  "devDependencies": {
+    "eslint": "^8.0.0"
+  }
+} 
