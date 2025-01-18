@@ -614,7 +614,12 @@ mainFocus.addEventListener('click', function() {
     chrome.storage.sync.get(['focusMode'], function(result) {
         if (result.focusMode && result.focusMode.links) {
             result.focusMode.links.forEach(({value}) => {
-                window.open(value, '_blank');
+                // Ensure URL is properly formatted
+                let url = value;
+                if (!url.match(/^https?:\/\//i)) {
+                    url = 'https://' + url;
+                }
+                window.open(url, '_blank');
             });
         }
     });
