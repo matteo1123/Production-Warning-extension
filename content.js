@@ -21,8 +21,9 @@ focusBar.style.cssText = `
     top: 0;
     left: 0;
     width: 100%;
-    background-color: transparent;
-    height: 2px;
+    background-color: #1a1a1a;
+    height: auto;
+    padding: 4px 0;
     border-bottom: 2px solid #ffd700;
     z-index: 10001;
     display: none;
@@ -57,7 +58,6 @@ focusLabel.style.cssText = `
     color: #cc0000;
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin-bottom: 2px;
     line-height: 1;
     opacity: 0;
     height: 0;
@@ -65,12 +65,11 @@ focusLabel.style.cssText = `
     transition: opacity 0.3s ease;
 `;
 focusLabel.textContent = "Current Focus";
-focusBar.appendChild(focusLabel);
 
 // Create main focus container
 const mainFocus = document.createElement('div');
 mainFocus.style.cssText = `
-    font-size: 18px;
+    font-size: 14px;
     color: #ffd700;
     font-weight: bold;
     display: flex;
@@ -79,10 +78,8 @@ mainFocus.style.cssText = `
     gap: 10px;
     line-height: 1;
     padding: 0;
-    opacity: 0;
-    height: 0;
-    overflow: hidden;
-    transition: all 0.3s ease;
+    cursor: pointer;
+    transition: color 0.3s ease;
 `;
 
 // Add emphasis arrows
@@ -116,6 +113,102 @@ linksContainer.style.cssText = `
     transition: all 0.3s ease;
 `;
 focusBar.appendChild(linksContainer);
+
+// Add context notes button
+const contextNotesBtn = document.createElement('div');
+contextNotesBtn.style.cssText = `
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    background-color: #2a2a2a;
+    border: 2px solid #ffd700;
+    border-radius: 50%;
+    color: #ffd700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    line-height: 1;
+    padding-bottom: 1px;
+`;
+contextNotesBtn.innerHTML = '&#43;'; // Using HTML entity for plus sign
+contextNotesBtn.title = 'Add Context Notes';
+
+// Add notification dot
+const notificationDot = document.createElement('div');
+notificationDot.style.cssText = `
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 8px;
+    height: 8px;
+    background-color: #cc0000;
+    border-radius: 50%;
+    display: none;
+`;
+contextNotesBtn.appendChild(notificationDot);
+focusBar.appendChild(contextNotesBtn);
+
+// Create notes popup
+const notesPopup = document.createElement('div');
+notesPopup.style.cssText = `
+    position: fixed;
+    top: 40px;
+    right: 10px;
+    width: 400px;
+    background-color: #1a1a1a;
+    border: 2px solid #ffd700;
+    border-radius: 4px;
+    padding: 15px;
+    z-index: 10002;
+    display: none;
+    color: #ffd700;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+`;
+
+const notesInput = document.createElement('textarea');
+notesInput.style.cssText = `
+    width: 100%;
+    height: 120px;
+    margin-bottom: 15px;
+    background-color: #2a2a2a;
+    border: 1px solid #ffd700;
+    color: #ffd700;
+    padding: 12px;
+    resize: vertical;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1.4;
+`;
+notesInput.placeholder = 'Enter your context note...';
+
+const notesList = document.createElement('div');
+notesList.style.cssText = `
+    max-height: 300px;
+    overflow-y: auto;
+`;
+
+const addNoteBtn = document.createElement('button');
+addNoteBtn.textContent = 'Add Note';
+addNoteBtn.style.cssText = `
+    padding: 8px 16px;
+    background-color: #2a2a2a;
+    color: #ffd700;
+    border: 1px solid #ffd700;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+`;
+
+notesPopup.appendChild(notesInput);
+notesPopup.appendChild(addNoteBtn);
+notesPopup.appendChild(notesList);
+document.body.appendChild(notesPopup);
 
 document.body.appendChild(focusBar);
 
@@ -243,16 +336,12 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
     }
 });
 
-// Add hover behavior to focus bar
+// Update hover behavior
 focusBar.addEventListener('mouseenter', function() {
-    focusBar.style.backgroundColor = '#1a1a1a';
-    focusBar.style.height = 'auto';
-    focusBar.style.padding = '5px 0';
+    focusBar.style.padding = '8px 0';
     focusLabel.style.opacity = '1';
     focusLabel.style.height = 'auto';
-    mainFocus.style.opacity = '1';
-    mainFocus.style.height = 'auto';
-    mainFocus.style.padding = '2px 0';
+    mainFocus.style.fontSize = '18px';
     linksContainer.style.opacity = '1';
     linksContainer.style.height = 'auto';
     linksContainer.style.marginTop = '8px';
@@ -262,20 +351,273 @@ focusBar.addEventListener('mouseenter', function() {
 });
 
 focusBar.addEventListener('mouseleave', function() {
-    focusBar.style.backgroundColor = 'transparent';
-    focusBar.style.height = '2px';
-    focusBar.style.padding = '0';
+    focusBar.style.padding = '4px 0';
     focusLabel.style.opacity = '0';
     focusLabel.style.height = '0';
-    mainFocus.style.opacity = '0';
-    mainFocus.style.height = '0';
-    mainFocus.style.padding = '0';
+    mainFocus.style.fontSize = '14px';
     linksContainer.style.opacity = '0';
     linksContainer.style.height = '0';
     linksContainer.style.marginTop = '0';
     logoContainer.style.opacity = '0';
     logoContainer.style.height = '0';
-    document.body.style.paddingTop = '2px';
+    document.body.style.paddingTop = focusBar.offsetHeight + 'px';
+});
+
+// Function to update notes display
+function updateNotesList(notes) {
+    notesList.innerHTML = '';
+    
+    // Add CSS for drag and drop
+    notesList.style.cssText = `
+        max-height: 300px;
+        overflow-y: auto;
+        position: relative;
+    `;
+    
+    notes.forEach((note, index) => {
+        const noteDiv = document.createElement('div');
+        noteDiv.style.cssText = `
+            padding: 12px;
+            margin: 8px 0;
+            background-color: #2a2a2a;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            font-size: 14px;
+            line-height: 1.4;
+            cursor: move;
+            user-select: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+        `;
+        noteDiv.draggable = true;
+        
+        const dragHandle = document.createElement('div');
+        dragHandle.style.cssText = `
+            width: 12px;
+            height: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 2px;
+            margin-right: 8px;
+            opacity: 0.5;
+            cursor: move;
+        `;
+        
+        // Add drag dots
+        for (let i = 0; i < 6; i++) {
+            const dot = document.createElement('div');
+            dot.style.cssText = `
+                width: 2px;
+                height: 2px;
+                background-color: #ffd700;
+                border-radius: 50%;
+            `;
+            dragHandle.appendChild(dot);
+        }
+        
+        const noteText = document.createElement('div');
+        noteText.textContent = note;
+        noteText.style.flex = '1';
+        noteText.style.marginRight = '12px';
+        noteText.style.whiteSpace = 'pre-wrap';
+        
+        const controls = document.createElement('div');
+        controls.style.marginLeft = '8px';
+        
+        const editBtn = document.createElement('button');
+        editBtn.textContent = '✎';
+        editBtn.style.cssText = `
+            margin-right: 6px;
+            padding: 4px 8px;
+            background: none;
+            border: none;
+            color: #ffd700;
+            cursor: pointer;
+            font-size: 16px;
+        `;
+        
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = '×';
+        deleteBtn.style.cssText = `
+            padding: 4px 8px;
+            background: none;
+            border: none;
+            color: #cc0000;
+            cursor: pointer;
+            font-size: 16px;
+        `;
+        
+        controls.appendChild(editBtn);
+        controls.appendChild(deleteBtn);
+        noteDiv.appendChild(dragHandle);
+        noteDiv.appendChild(noteText);
+        noteDiv.appendChild(controls);
+        notesList.appendChild(noteDiv);
+        
+        // Drag and drop handlers
+        noteDiv.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('text/plain', index.toString());
+            noteDiv.style.opacity = '0.5';
+            noteDiv.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+        });
+        
+        noteDiv.addEventListener('dragend', () => {
+            noteDiv.style.opacity = '1';
+            noteDiv.style.boxShadow = 'none';
+            noteDiv.style.transform = 'none';
+        });
+        
+        noteDiv.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            const draggingIndex = parseInt(e.dataTransfer.getData('text/plain'));
+            if (draggingIndex !== index) {
+                const rect = noteDiv.getBoundingClientRect();
+                const midpoint = rect.top + rect.height / 2;
+                if (e.clientY < midpoint) {
+                    noteDiv.style.transform = 'translateY(10px)';
+                } else {
+                    noteDiv.style.transform = 'translateY(-10px)';
+                }
+            }
+        });
+        
+        noteDiv.addEventListener('dragleave', () => {
+            noteDiv.style.transform = 'none';
+        });
+        
+        noteDiv.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const fromIndex = parseInt(e.dataTransfer.getData('text/plain'));
+            const toIndex = index;
+            
+            if (fromIndex !== toIndex) {
+                chrome.storage.sync.get(['contextNotes'], result => {
+                    const notes = result.contextNotes || {};
+                    const urlNotes = notes[window.location.href] || [];
+                    const [movedNote] = urlNotes.splice(fromIndex, 1);
+                    urlNotes.splice(toIndex, 0, movedNote);
+                    notes[window.location.href] = urlNotes;
+                    chrome.storage.sync.set({ contextNotes: notes }, () => {
+                        updateNotesList(urlNotes);
+                    });
+                });
+            }
+            noteDiv.style.transform = 'none';
+        });
+        
+        editBtn.onclick = () => {
+            notesInput.value = note;
+            chrome.storage.sync.get(['contextNotes'], result => {
+                const notes = result.contextNotes || {};
+                const urlNotes = notes[window.location.href] || [];
+                urlNotes.splice(index, 1);
+                notes[window.location.href] = urlNotes;
+                chrome.storage.sync.set({ contextNotes: notes });
+            });
+        };
+        
+        deleteBtn.onclick = () => {
+            chrome.storage.sync.get(['contextNotes'], result => {
+                const notes = result.contextNotes || {};
+                const urlNotes = notes[window.location.href] || [];
+                urlNotes.splice(index, 1);
+                notes[window.location.href] = urlNotes;
+                chrome.storage.sync.set({ contextNotes: notes }, () => {
+                    updateNotesList(urlNotes);
+                    if (urlNotes.length === 0) {
+                        notificationDot.style.display = 'none';
+                        contextNotesBtn.style.animation = 'none';
+                    }
+                });
+            });
+        };
+    });
+}
+
+// Load and display existing notes
+function loadContextNotes() {
+    chrome.storage.sync.get(['contextNotes'], result => {
+        const notes = result.contextNotes || {};
+        const urlNotes = notes[window.location.href] || [];
+        if (urlNotes.length > 0) {
+            notificationDot.style.display = 'block';
+            // Add a pulse animation to the context notes button
+            contextNotesBtn.style.animation = 'pulse 2s';
+            contextNotesBtn.style.animationIterationCount = '3';
+        }
+    });
+}
+
+// Event listeners for notes functionality
+contextNotesBtn.addEventListener('click', () => {
+    chrome.storage.sync.get(['contextNotes'], result => {
+        const notes = result.contextNotes || {};
+        const urlNotes = notes[window.location.href] || [];
+        updateNotesList(urlNotes);
+        notesPopup.style.display = notesPopup.style.display === 'none' ? 'block' : 'none';
+        if (notesPopup.style.display === 'block') {
+            notificationDot.style.display = 'none';
+            contextNotesBtn.style.animation = 'none';
+        }
+    });
+});
+
+addNoteBtn.addEventListener('click', () => {
+    const noteText = notesInput.value.trim();
+    if (noteText) {
+        chrome.storage.sync.get(['contextNotes'], result => {
+            const notes = result.contextNotes || {};
+            const urlNotes = notes[window.location.href] || [];
+            urlNotes.push(noteText);
+            notes[window.location.href] = urlNotes;
+            chrome.storage.sync.set({ contextNotes: notes }, () => {
+                notesInput.value = '';
+                updateNotesList(urlNotes);
+                contextNotesBtn.style.transform = 'translateY(0)';
+            });
+        });
+    }
+});
+
+document.addEventListener('click', (e) => {
+    if (!notesPopup.contains(e.target) && e.target !== contextNotesBtn) {
+        notesPopup.style.display = 'none';
+    }
+});
+
+// Load notes when page loads
+loadContextNotes();
+
+// Add CSS animation for the pulse effect
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes pulse {
+        0% { transform: translateY(-50%) scale(1); }
+        50% { transform: translateY(-50%) scale(1.1); }
+        100% { transform: translateY(-50%) scale(1); }
+    }
+`;
+document.head.appendChild(style);
+
+mainFocus.addEventListener('mouseover', function() {
+    mainFocus.style.color = '#cc0000';
+});
+
+mainFocus.addEventListener('mouseout', function() {
+    mainFocus.style.color = '#ffd700';
+});
+
+mainFocus.addEventListener('click', function() {
+    chrome.storage.sync.get(['focusMode'], function(result) {
+        if (result.focusMode && result.focusMode.links) {
+            result.focusMode.links.forEach(({value}) => {
+                window.open(value, '_blank');
+            });
+        }
+    });
 });
 
 
